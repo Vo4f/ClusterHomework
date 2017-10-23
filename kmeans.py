@@ -12,27 +12,42 @@ import csv
 
 
 class kmeans(object):
-    def __init__(self, k, file, l):
+    def __init__(self, k, file):
         self.k = k
         self.file = file
-        self.l = l
         self.data = None
+        self.set = None
         self.res = None
+        self.ind = None
         self._centroid = None
 
     def file_load(self):
         with open(self.file, 'r') as f:
             raw = np.asarray(list(csv.reader(f, delimiter=",")), dtype=float)
-            self.data = raw[:self.l, :-1]
-            self.res = raw[:self.l, -1:]
+            self.data = raw
 
     def cal_eucdist(self, array1, array2):
         return np.sqrt(np.sum((array1 - array2) ** 2))
 
-    def set_center(self):
-        centroids = self.data
-        np.random.shuffle(centroids)
-        self._centroid = centroids[:self.k]
+    def set_rcenter(self):
+        tmp = self.data
+        np.random.shuffle(tmp)
+        self._centroid = tmp[:self.k]
+        self.set = tmp[:, :-2]
+        self.res = tmp[:, -2:-1]
+        self.ind = tmp[:, -1:]
+
+    def cal_center(self):
+        pass
+
+    def _converged(self, centroid1, centroid2):
+        return np.array_equal(centroid1, centroid2)
+
+    def cal_kmeans(self):
+        converge = False
+        while not converge:
+            for i in self.set:
+                pass
 
     def cal_closest(self, array):
         min_dist = 10000000
@@ -41,13 +56,12 @@ class kmeans(object):
             tmp = self.cal_eucdist(i, array)
             if tmp < min_dist:
                 min_dist = tmp
-                min_res = i
-        return i
-
-
+                min_res = np.copy(i)
+        return min_res
 
 
 if __name__ == '__main__':
-    km = kmeans(3, 'waveform.data', 1000)
+    km = kmeans(3, 'waveform012.data')
     km.file_load()
-    km.set_center()
+    km.set_rcenter()
+

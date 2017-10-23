@@ -7,8 +7,26 @@
 @time: 2017/10/22 20:25
 @doc: Process basic data
 """
+import csv
 
+list0 = []
+list1 = []
+list2 = []
+with open('waveform.data', 'r') as f:
+    raw = list(csv.reader(f, delimiter=","))
+    for i in raw[:500]:
+        if i[-1] == '0' and len(list0) < 100:
+            list0.append(i)
+        elif i[-1] == '1' and len(list1) < 100:
+            list1.append(i)
+        elif i[-1] == '2' and len(list1) < 100:
+            list2.append(i)
 
-class DataProcess:
-    def __init__(self, flag):
-        self.flag = flag
+list012 = list0 + list1 + list2
+num = 1
+for i in list012:
+    i.append(num)
+    num += 1
+with open('waveform012.data', 'w', newline='') as f:
+    wf = csv.writer(f)
+    wf.writerows(list012)
