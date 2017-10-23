@@ -7,7 +7,8 @@
 @time: 2017/10/22 20:25
 @doc: Process basic data
 """
-class DataProcess:
 
+
+class DataProcess:
     def __init__(self, flag):
         self.flag = flag
