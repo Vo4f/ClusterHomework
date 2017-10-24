@@ -43,25 +43,33 @@ class kmeans(object):
     def cal_kmeans(self):
         set = np.copy(self.data)
         cent_label = []
-        classifier = [list() for i in range(self.k)]
         for i in self._centroid:
             cent_label.append(i.tolist())
         converge = False
         flag = 1
         while not converge:
+            classifier = [list() for i in range(self.k)]
+            print("iter:" + str(flag))
             flag += 1
             bak_cent = cent_label[:]
-            old_cent = [[round(j, 5) for j in i] for i in bak_cent]
+            old_cent = [[round(j, 10) for j in i] for i in bak_cent]
             for i in set:
                 tmp = self.cal_closest(i).tolist()
                 tmp_index = cent_label.index(tmp)
                 classifier[tmp_index].append(i)
             for j in range(self.k):
                 new_cent = np.mean(classifier[j], axis=0)
+                self._centroid[j] = new_cent
                 cent_label[j] = new_cent.tolist()
-            cur_cent = [[round(j, 5) for j in i] for i in cent_label]
-            if old_cent == cur_cent or flag > self.max_iter:
+            cur_cent = [[round(j, 10) for j in i] for i in cent_label]
+            if old_cent[:-1] == cur_cent[:-1] or flag > self.max_iter:
                 converge = True
+                num = 0
+                for rl in classifier:
+                    with open('res'+str(num)+'.res', 'w', newline='') as f:
+                        wf = csv.writer(f)
+                        wf.writerows(rl)
+                    num += 1
                 print("Done!")
 
     def cal_closest(self, array):
@@ -77,7 +85,7 @@ class kmeans(object):
 
 
 if __name__ == '__main__':
-    km = kmeans(3, 'waveform012.data')
+    km = kmeans(3, 'waveform012.data', 500)
     km.file_load()
     km.set_rcenter()
     km.cal_kmeans()
