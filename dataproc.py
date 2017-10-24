@@ -23,10 +23,7 @@ with open('waveform.data', 'r') as f:
             list2.append(i)
 
 list012 = list0 + list1 + list2
-num = 1
-for i in list012:
-    i.append(num)
-    num += 1
+
 with open('waveform012.data', 'w', newline='') as f:
     wf = csv.writer(f)
     wf.writerows(list012)
