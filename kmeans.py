@@ -54,7 +54,6 @@ class kmeans(object):
             old_cent = [[round(j, 5) for j in i] for i in bak_cent]
             for i in set:
                 tmp = self.cal_closest(i).tolist()
-                print(tmp)
                 tmp_index = cent_label.index(tmp)
                 classifier[tmp_index].append(i)
             for j in range(self.k):
