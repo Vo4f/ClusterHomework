@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 """
 @author: verf
 @project: PyCharm
@@ -64,12 +64,21 @@ class kmeans(object):
             cur_cent = [[round(j, 10) for j in i] for i in cent_label]
             if old_cent[:-1] == cur_cent[:-1] or flag > self.max_iter:
                 converge = True
-                num = 0
                 for rl in classifier:
-                    with open('res'+str(num)+'.res', 'w', newline='') as f:
-                        wf = csv.writer(f)
-                        wf.writerows(rl)
-                    num += 1
+                    num1 = 0
+                    num2 = 0
+                    num3 = 0
+                    for item in rl:
+                        if item[-1] == 0.0:
+                            num1 += 1
+                        if item[-1] == 1.0:
+                            num2 += 1
+                        if item[-1] == 2.0:
+                            num3 += 1
+                    print(num1)
+                    print(num2)
+                    print(num3)
+                    print('----')
                 print("Done!")
 
     def cal_closest(self, array):
