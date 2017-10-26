@@ -5,7 +5,7 @@
 @project: PyCharm
 @file: calculator.py
 @time: 2017/10/25 9:59
-@doc: 
+@doc: 距离函数
 """
 import numpy as np
 

@@ -28,8 +28,8 @@ def image_load(file_name):
             for j in range(n):
                 tmp = []
                 x, y, z = im.getpixel((i, j))
-                tmp.append(x / 256.0)
-                tmp.append(y / 256.0)
-                tmp.append(z / 256.0)
+                tmp.append(x)
+                tmp.append(y)
+                tmp.append(z)
                 data.append(tmp)
-    return np.mat(data)
+    return np.asarray(data)
