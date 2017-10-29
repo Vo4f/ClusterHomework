@@ -32,7 +32,8 @@ class KMeans(object):
         converged = False
         while not converged:
             classifier = []
-            for i in range(num_terms):
+            for i in dataset:
+                pass
 
 
     def predict(self, point):
