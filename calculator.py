@@ -10,9 +10,15 @@
 import numpy as np
 
 
-def euclidean_dist(array1, array2):
+def dist_euclidean(array1, array2):
+    """
+    Calculate Euclidean Distance of two array
+    :param array1:
+    :param array2:
+    :return: int number about euclidean distance
+    """
     return np.sqrt(np.sum((array1 - array2) ** 2))
 
 
-def manhattan_dist(array1, array2):
+def dis_manhattan(array1, array2):
     return np.sum(np.abs(array1 - array2))

@@ -22,10 +22,17 @@ def closet_center(item, centorid):
     return min_res
 
 
-def init_center(data, k):
-    tmp = np.copy(data)
+def init_center(data, num_clusters):
+    """
+    Init the raw data set, random choose centroid
+    :param data: np array
+    :param num_clusters: number of clusters
+    :return: centroid list
+    """
+    tmp = data.tolist()
     np.random.shuffle(tmp)
-    return tmp[:k]
+    print(type(tmp))
+    return tmp[:num_clusters]
 
 
 def isconverged(centroid1, centroid2):
