@@ -16,4 +16,4 @@ X, y = make_blobs(n_samples=50, n_features=2, centers=[[-1,-1], [0,0], [1,1], [2
                   random_state =9)
 from sklearn.cluster import KMeans
 y_pred = KMeans(n_clusters=2, random_state=9).fit(X)
-print(y_pred.cluster_centers_)
+print(y_pred.labels_.shape)

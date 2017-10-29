@@ -11,16 +11,6 @@ import numpy as np
 import PIL.Image as image
 import calculator
 
-def closet_center(item, centorid):
-    min_dist = 10000000
-    min_res = None
-    for n, i in enumerate(centorid):
-        dist = calculator.euclidean_dist(i, item)
-        if dist < min_dist:
-            min_dist = dist
-            min_res = n
-    return min_res
-
 
 def init_center(data, num_clusters):
     """
