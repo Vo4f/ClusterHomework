@@ -23,76 +23,47 @@ def calc_closet(term, centroid):
         if dist < min_dist:
             min_dist = dist
             min_index = index
-        else:
-            min_index = None
     return min_index
 
 
 class KMeans(object):
-    def __init__(self, num_clusters, init_methods='random', max_iter='300'):
+    def __init__(self, num_clusters, init_methods='random', max_iter=300, precision=5):
         self._num_clusters = num_clusters
         self._init_methods = init_methods
         self._max_iter = max_iter
-        self._centroid = None
-        self.label_ = None
+        self._precision = precision
+        self._centroids = None
+        self.labels_ = None
+        self.centroids_ = None
 
     def fit(self, dataset):
         if not isinstance(dataset, np.ndarray):
             dataset = np.asarray(dataset)
         num_terms = dataset.shape[0]
         if self._init_methods == 'random':
-            self._centroid = utils.init_center(dataset, self._num_clusters)
-        self._centroid = self._init_methods
+            self._centroids = utils.init_center(dataset, self._num_clusters)
+        else:
+            self._centroids = self._init_methods
         converged = False
+        num_iter = 0
         while not converged:
+            num_iter += 1
+            print("iter: " + str(num_iter))
+            self.labels_ = np.zeros(num_terms)
+            cluster = [[] for i in range(self._num_clusters)]
             for i in range(num_terms):
-                pass
+                min_index = calc_closet(dataset[i], self._centroids)
+                self.labels_[i] = min_index
+                cluster[min_index].append(dataset[i])
+            old_centroids = [[round(j, self._precision) for j in i] for i in self._centroids]
+            for index, term in enumerate(cluster):
+                self._centroids[index] = calc_center(term)
+            cur_centroids = [[round(j, self._precision) for j in i] for i in self._centroids]
+            if utils.isconverged(old_centroids, cur_centroids) or num_iter > self._max_iter:
+                converged = True
+                self.centroids_ = np.copy(self._centroids)
+                print('Done!')
 
-    def predict(self, point):
-        pass
-
-        # def cal_kmeans(self):
-        #     data = []
-        #     if self.type == 'data':
-        #         raw_data = loader.data_load(self.file)
-        #         for l in raw_data:
-        #             data.append(l[:-1])
-        #     elif self.type == 'image':
-        #         raw_data = loader.image_load(self.file)
-        #         for l in raw_data:
-        #             data.append(l)
-        #     else:
-        #         raw_data = []
-        #     data = np.asarray(data)
-        #     centroid = utils.init_center(data, self.k)
-        #     converged = False
-        #     iter_count = 0
-        #     while not converged:
-        #         iter_count += 1
-        #         print('iter:' + str(iter_count))
-        #         class_list = [[] for i in range(self.k)]
-        #         raw_list = [[] for i in range(self.k)]
-        #         old_centroid = [[round(j, self.precision) for j in i] for i in centroid]
-        #         # old_centroid = centroid[:]
-        #         for ind, item in enumerate(data):
-        #             centroid_index = utils.closet_center(item, centroid)
-        #             class_list[centroid_index].append(item)
-        #             raw_list[centroid_index].append(raw_data[ind])
-        #         for ind, term in enumerate(class_list):
-        #             centroid[ind] = calc_new_center(term)
-        #         cur_centroid = [[round(j, self.precision) for j in i] for i in centroid]
-        #         # cur_centroid = centroid[:]
-        #         if utils.isconverged(old_centroid[:-1], cur_centroid[:-1]) or iter_count > self.max_iter:
-        #             converged = True
-        #             if self.type == 'data':
-        #                 utils.data_display(raw_list)
-        #             elif self.type == 'image':
-        #                 utils.image_display(class_list, data)
-        #             print('Done!')
-
-
-if __name__ == '__main__':
-    pass
-    # km = Kmeans(3, 'waveform012.data', 'data', 50, 5)
-    # km = Kmeans(3, 'waveform012.data', 'data', 500, 10)
-    # km.cal_kmeans()
+    def predict(self, dataset):
+        self.fit(dataset)
+        return self.labels_

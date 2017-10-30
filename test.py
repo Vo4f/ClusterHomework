@@ -7,13 +7,48 @@
 @time: 2017/10/29 20:51
 @doc: 
 """
-
+import loader
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.datasets.samples_generator import make_blobs
-# X为样本特征，Y为样本簇类别， 共1000个样本，每个样本4个特征，共4个簇，簇中心在[-1,-1], [0,0],[1,1], [2,2]， 簇方差分别为[0.4, 0.2, 0.2]
-X, y = make_blobs(n_samples=50, n_features=2, centers=[[-1,-1], [0,0], [1,1], [2,2]], cluster_std=[0.4, 0.2, 0.2, 0.2],
-                  random_state =9)
-from sklearn.cluster import KMeans
-y_pred = KMeans(n_clusters=2, random_state=9).fit(X)
-print(y_pred.labels_.shape)
+import PIL.Image as Im
+from kmeans import KMeans
+
+
+def data_test(dataset_name, num_cluster):
+    km = KMeans(num_cluster)
+    raw = loader.data_load(dataset_name)
+    raw = np.delete(raw, -1, 1)
+    km.fit(raw)
+    label = km.labels_
+    class1 = label[:100]
+    class2 = label[100:200]
+    class3 = label[200:]
+    print(np.sum(class1 == 0.))
+    print(np.sum(class1 == 1.))
+    print(np.sum(class1 == 2.))
+    print('---')
+    print(np.sum(class2 == 0.))
+    print(np.sum(class2 == 1.))
+    print(np.sum(class2 == 2.))
+    print('---')
+    print(np.sum(class3 == 0.))
+    print(np.sum(class3 == 1.))
+    print(np.sum(class3 == 2.))
+
+
+def image_test(image_name, num_cluster):
+    img_data, row, col = loader.image_load(image_name)
+    km = KMeans(num_cluster)
+    km.fit(img_data)
+    label = km.labels_
+    label = label.reshape([row, col])
+    centroid = km.centroids_.astype(int)
+    pic_new = Im.new("RGB", (row, col))
+    for i in range(row):
+        for j in range(col):
+            pic_new.putpixel((i, j), tuple(centroid[int(label[i][j])].tolist()))
+    pic_new.save('image_cluster.jpg')
+
+
+if __name__ == '__main__':
+    data_test('waveform012.data', 3)
+    # image_test('image_test.jpg', 3)

@@ -21,15 +21,10 @@ def data_load(file_name):
 def image_load(file_name):
     with open(file_name, 'rb') as f:
         data = []
-        im = image.open(f)
-        m, n = im.size
-        print(m, n)
+        img = image.open(f)
+        m, n = img.size
         for i in range(m):
             for j in range(n):
-                tmp = []
-                x, y, z = im.getpixel((i, j))
-                tmp.append(x)
-                tmp.append(y)
-                tmp.append(z)
-                data.append(tmp)
-    return np.asarray(data)
+                x, y, z = img.getpixel((i, j))
+                data.append([x, y, z])
+    return np.asarray(data), m, n
