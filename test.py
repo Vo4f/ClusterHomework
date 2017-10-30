@@ -19,20 +19,14 @@ def data_test(dataset_name, num_cluster):
     raw = np.delete(raw, -1, 1)
     km.fit(raw)
     label = km.labels_
-    class1 = label[:100]
-    class2 = label[100:200]
-    class3 = label[200:]
-    print(np.sum(class1 == 0.))
-    print(np.sum(class1 == 1.))
-    print(np.sum(class1 == 2.))
+    class0 = label[:100]
+    class1 = label[100:200]
+    class2 = label[200:]
     print('---')
-    print(np.sum(class2 == 0.))
-    print(np.sum(class2 == 1.))
-    print(np.sum(class2 == 2.))
-    print('---')
-    print(np.sum(class3 == 0.))
-    print(np.sum(class3 == 1.))
-    print(np.sum(class3 == 2.))
+    print('Accuracy: ')
+    print('wave 0: ' + str(max(np.sum(class0 == 0.), np.sum(class0 == 1.), np.sum(class0 == 2.)) / 100.))
+    print('wave 1: ' + str(max(np.sum(class1 == 0.), np.sum(class1 == 1.), np.sum(class1 == 2.)) / 100.))
+    print('wave 2: ' + str(max(np.sum(class2 == 0.), np.sum(class2 == 1.), np.sum(class2 == 2.)) / 100.))
 
 
 def image_test(image_name, num_cluster):

@@ -5,6 +5,9 @@
       <w>dataset</w>
       <w>isconverged</w>
       <w>kmeans</w>
+      <w>kmedoids</w>
+      <w>medoids</w>
+      <w>ndarray</w>
     </words>
   </dictionary>
 </component>

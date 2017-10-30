@@ -9,19 +9,28 @@
 """
 import numpy as np
 import csv
-import PIL.Image as image
+import PIL.Image as Im
 
 
 def data_load(file_name):
+    """
+    load data set
+    :param file_name:
+    :return: raw data in ndarray type
+    """
     with open(file_name, 'r') as f:
-        raw = np.asarray(list(csv.reader(f, delimiter=",")), dtype=float)
-    return raw
+        return np.asarray(list(csv.reader(f, delimiter=",")), dtype=float)
 
 
 def image_load(file_name):
+    """
+    load image
+    :param file_name:
+    :return: raw data in ndarray type, and the size of image
+    """
     with open(file_name, 'rb') as f:
         data = []
-        img = image.open(f)
+        img = Im.open(f)
         m, n = img.size
         for i in range(m):
             for j in range(n):
