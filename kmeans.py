@@ -55,8 +55,9 @@ class KMeans(object):
         self._max_iter = max_iter
         self._precision = precision
         self._centroids = None
-        self.labels_ = None
-        self.centroids_ = None
+        self._labels = None
+        self.centroids = None
+        self.labels = None
 
     def fit(self, dataset):
         """
@@ -76,7 +77,7 @@ class KMeans(object):
         while not converged:
             num_iter += 1
             print("iter: " + str(num_iter))
-            self.labels_ = np.zeros(num_items)
+            self._labels = np.zeros(num_items)
             cluster = [[] for i in range(self._num_clusters)]
 
             # enumerate  every item in data set
@@ -84,7 +85,7 @@ class KMeans(object):
             # then mark it in labels and append the item in cluster list
             for i in range(num_items):
                 min_index = calc_closest(dataset[i], self._centroids)
-                self.labels_[i] = min_index
+                self._labels[i] = min_index
                 cluster[min_index].append(dataset[i])
             old_centroids = [[round(j, self._precision) for j in i] for i in self._centroids]
 
@@ -96,7 +97,8 @@ class KMeans(object):
             # check is converged or not
             if utils.isconverged(old_centroids, cur_centroids) or num_iter > self._max_iter:
                 converged = True
-                self.centroids_ = np.copy(self._centroids)
+                self.centroids = np.copy(self._centroids)
+                self.labels = np.copy(self._labels)
                 print('Done!')
 
     def predict(self, dataset):
@@ -106,4 +108,4 @@ class KMeans(object):
         :return:
         """
         self.fit(dataset)
-        return self.labels_
+        return self.labels

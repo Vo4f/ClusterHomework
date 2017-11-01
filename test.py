@@ -18,7 +18,7 @@ def data_test(dataset_name, num_cluster):
     raw = loader.data_load(dataset_name)
     raw = np.delete(raw, -1, 1)
     km.fit(raw)
-    label = km.labels_
+    label = km._labels
     class0 = label[:100]
     class1 = label[100:200]
     class2 = label[200:]
@@ -33,9 +33,9 @@ def image_test(image_name, num_cluster):
     img_data, row, col = loader.image_load(image_name)
     km = KMeans(num_cluster)
     km.fit(img_data)
-    label = km.labels_
+    label = km.labels
     label = label.reshape([row, col])
-    centroid = km.centroids_.astype(int)
+    centroid = km.centroids.astype(int)
     pic_new = Im.new("RGB", (row, col))
     for i in range(row):
         for j in range(col):

@@ -15,6 +15,6 @@ def dist_euclidean(array1, array2):
     return np.sqrt(np.sum((array1 - array2) ** 2))
 
 
-def dis_manhattan(array1, array2):
+def dist_manhattan(array1, array2):
     """ Calculate Manhattan Distance of two given array """
     return np.sum(np.abs(array1 - array2))
