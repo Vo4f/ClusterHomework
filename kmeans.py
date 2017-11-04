@@ -48,7 +48,7 @@ class KMeans(object):
         :param init_methods: The methods of initial centroids.
                              The default is random, if you want another, try apply what centroids you want.
         :param max_iter: The maximum number of iteration.
-        :param precision: The precision of converaged.
+        :param precision: The precision of converged.
         """
         self._num_clusters = num_clusters
         self._init_methods = init_methods
@@ -80,7 +80,7 @@ class KMeans(object):
             self._labels = np.zeros(num_items)
             cluster = [[] for i in range(self._num_clusters)]
 
-            # enumerate  every item in data set
+            # enumerate every item in data set
             # calculate which is the closest centroid for given item
             # then mark it in labels and append the item in cluster list
             for i in range(num_items):

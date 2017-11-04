@@ -11,10 +11,16 @@ import loader
 import numpy as np
 import PIL.Image as Im
 from kmeans import KMeans
+from kmedoids import KMedoids
 
 
-def data_test(dataset_name, num_cluster):
-    km = KMeans(num_cluster)
+def data_test(dataset_name, num_cluster, methods):
+    if methods == 'kmeans':
+        km = KMeans(num_cluster)
+    elif methods == 'kmedoids':
+        km = KMedoids(num_cluster)
+    else:
+        km = None
     raw = loader.data_load(dataset_name)
     raw = np.delete(raw, -1, 1)
     km.fit(raw)
@@ -29,9 +35,14 @@ def data_test(dataset_name, num_cluster):
     print('wave 2: ' + str(max(np.sum(class2 == 0.), np.sum(class2 == 1.), np.sum(class2 == 2.)) / 100.))
 
 
-def image_test(image_name, num_cluster):
-    img_data, row, col = loader.image_load(image_name)
-    km = KMeans(num_cluster)
+def image_test(image_name, num_cluster, methods, gauss=False):
+    img_data, row, col = loader.image_load(image_name, gauss)
+    if methods == 'kmeans':
+        km = KMeans(num_cluster)
+    elif methods == 'kmedoids':
+        km = KMedoids(num_cluster)
+    else:
+        km = None
     km.fit(img_data)
     label = km.labels
     label = label.reshape([row, col])
@@ -40,9 +51,12 @@ def image_test(image_name, num_cluster):
     for i in range(row):
         for j in range(col):
             pic_new.putpixel((i, j), tuple(centroid[int(label[i][j])].tolist()))
-    pic_new.save('image_cluster.jpg')
+    if gauss:
+        pic_new.save(methods + '-gauss' + '.jpg')
+    else:
+        pic_new.save(methods + '.jpg')
 
 
 if __name__ == '__main__':
-    data_test('waveform012.data', 3)
-    # image_test('image_test.jpg', 3)
+    data_test('waveform012.data', 3, 'kmedoids')
+    # image_test('origin.jpg', 3, 'kmeans', gauss=True)

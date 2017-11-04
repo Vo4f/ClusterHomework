@@ -10,6 +10,7 @@
 import numpy as np
 import csv
 import PIL.Image as Im
+import PIL.ImageFilter as IF
 
 
 def data_load(file_name):
@@ -22,7 +23,7 @@ def data_load(file_name):
         return np.asarray(list(csv.reader(f, delimiter=",")), dtype=float)
 
 
-def image_load(file_name):
+def image_load(file_name, gause):
     """
     load image
     :param file_name:
@@ -31,6 +32,8 @@ def image_load(file_name):
     with open(file_name, 'rb') as f:
         data = []
         img = Im.open(f)
+        if gause:
+            img = img.filter(IF.GaussianBlur(radius=20))
         m, n = img.size
         for i in range(m):
             for j in range(n):

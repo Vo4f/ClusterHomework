@@ -40,7 +40,7 @@ class KMedoids(object):
         :param init_methods: The methods of initial centroids.
                              The default is random, if you want another, try apply what centroids you want.
         :param max_iter: The maximum number of iteration.
-        :param precision: The precision of converaged.
+        :param precision: The precision of converged.
         """
         self._num_clusters = num_clusters
         self._init_methods = init_methods
@@ -56,7 +56,7 @@ class KMedoids(object):
 
     def fit(self, dataset):
         """
-        Using K-Means to calculate clusters.
+        Using K-Medoids to calculate clusters.
         :param dataset: data set in type ndarray
         :return: None
         """
@@ -72,22 +72,58 @@ class KMedoids(object):
         while not converged:
             num_iter += 1
             print("iter: " + str(num_iter))
-            self._clusters, self._labels, self._total_cost = self._classifier(dataset)
+            record = {}
+            tmp_labels = {}
+            self._clusters, _, self._total_cost = self._classifier(dataset)
+
+            # enumerate every cluster and every uncentroid point
+            # change centroid and uncentroid point
+            # record their total cost
+            # find which point has the minimum total point
+            # make this point as the new centroid
+            # until can't find another new point
             for ind, cl in enumerate(self._clusters):
                 for item in cl:
-                    if not np.equal(item, self._centroids[ind]):
-                        self._centroids[ind] = item
-                        clusters, labels, total_cost = self._classifier(dataset)
-                        if total_cost < self._total_cost:
-                            self._total_cost = total_cost
+                    tmp_centroids = np.copy(self._centroids)
+                    tmp_centroids[ind] = item
+                    clusters, _, total_cost = self._classifier(dataset, centroids=tmp_centroids)
+                    record[tuple(item)] = total_cost
+                    tmp_labels[tuple(item)] = ind
+            best = min(record.items(), key=lambda x: x[1])[0]
+            best_ind = tmp_labels[best]
+            if not str(self._centroids[best_ind]) == str(np.asarray(best)):
+                self._centroids[best_ind] = np.asarray(best)
+            else:
+                converged = True
+                self.centroids = np.copy(self._centroids)
+                self._clusters, self._labels, self._total_cost = self._classifier(dataset)
+                self.labels = np.copy(self._labels)
 
-    def _classifier(self, dataset):
+    def _classifier(self, dataset, centroids=None):
+        """
+        classify the data set, create new cluster
+        :param dataset:
+        :param centroids:
+        :return:
+        """
+        if centroids is not None:
+            tmp_centroids = centroids
+        else:
+            tmp_centroids = self._centroids
         cluster = [[] for i in range(self._num_clusters)]
-        label = np.zeros(self._num_items)
+        labels = np.zeros(self._num_items)
         total_cost = 0.0
         for i in range(self._num_items):
-            min_index, min_dist = calc_closest(dataset[i], self._centroids)
-            label[i] = min_index
+            min_index, min_dist = calc_closest(dataset[i], tmp_centroids)
             cluster[min_index].append(dataset[i])
+            labels[i] = min_index
             total_cost += min_dist
-        return cluster, label, total_cost
+        return cluster, labels, total_cost
+
+
+if __name__ == '__main__':
+    data = np.random.rand(20, 3)
+    print(data)
+    km = KMedoids(3)
+    km.fit(data)
+    print(km.labels)
