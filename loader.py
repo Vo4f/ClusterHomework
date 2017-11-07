@@ -19,8 +19,9 @@ def data_load(file_name):
     :param file_name:
     :return: raw data in ndarray type
     """
-    with open(file_name, 'r') as f:
-        return np.asarray(list(csv.reader(f, delimiter=",")), dtype=float)
+    with open(file_name, 'r', encoding='utf-8') as f:
+        data_list = list(csv.reader(f, delimiter=","))
+    return np.asarray(data_list, dtype=str)
 
 
 def image_load(file_name, gause):
