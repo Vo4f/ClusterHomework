@@ -13,7 +13,7 @@ import PIL.Image as Im
 import PIL.ImageFilter as IF
 
 
-def data_load(file_name):
+def csv_load(file_name):
     """
     load data set
     :param file_name:
@@ -21,7 +21,7 @@ def data_load(file_name):
     """
     with open(file_name, 'r', encoding='utf-8') as f:
         data_list = list(csv.reader(f, delimiter=","))
-    return np.asarray(data_list, dtype=str)
+    return data_list
 
 
 def image_load(file_name, gause):

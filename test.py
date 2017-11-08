@@ -58,22 +58,35 @@ def image_test(image_name, num_cluster, methods, gauss=False):
 
 
 def crawler_test(data_name, num_cluster):
-    raw = loader.data_load(data_name)
+    raw = loader.csv_load(data_name)
     words = raw[0]
-    raw = np.delete(raw, (0), 1)
-    raw = np.delete(raw, (0), 0)
-    raw = np.asarray(raw, dtype=float)
+    items = raw[1:]
+    data = np.asarray(raw, dtype=str)
+    data = np.delete(data, (0), 1)
+    data = np.delete(data, (0), 0)
+    data = np.asarray(data, dtype=float)
     km = KMeans(num_cluster)
-    km.fit(raw)
-    for ni, i in enumerate(km.centroids):
-        for n, j in enumerate(i):
-            if j != 0.0:
-                print(str(ni), words[n+1])
+    km.fit(data)
+    # for ni, i in enumerate(km.centroids):
+    #     for n, j in enumerate(i):
+    #         if j != 0.0:
+    #             print(str(ni), words[n + 1])
     # print(km.labels)
     # print(km.centroids)
+    cluster = [[] for i in range(num_cluster)]
+    for n, i in enumerate(km.labels):
+        cluster[int(i)].append(items[n][0])
+    keys = []
+    for n, i in enumerate(km.centroids):
+        tmp = {}
+        for j, k in enumerate(i):
+            tmp[words[j]] = k
+        tmp = sorted(tmp.items(), key=lambda x: x[1])
+        keys.append(tmp[-3:])
+    print(keys)
 
 
 if __name__ == '__main__':
     # data_test('waveform012.data', 3, 'kmedoids')
     # image_test('origin.jpg', 3, 'kmeans', gauss=True)
-    crawler_test('data.data', 6)
+    crawler_test('data.data', 10)

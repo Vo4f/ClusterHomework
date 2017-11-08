@@ -93,7 +93,6 @@ class KMeans(object):
             for index, term in enumerate(cluster):
                 self._centroids[index] = calc_center(term)
             cur_centroids = [[round(j, self._precision) for j in i] for i in self._centroids]
-
             # check is converged or not
             if utils.isconverged(old_centroids, cur_centroids) or num_iter > self._max_iter:
                 converged = True
