@@ -83,14 +83,24 @@ def crawler_test(data_name, num_cluster):
             tmp[words[j]] = k
         tmp = sorted(tmp.items(), key=lambda x: x[1])
         keys.append(tmp[-3:])
-    print(keys)
+    for n, i in enumerate(keys):
+        print(str(n)+'类', i)
+    while True:
+        print("请输入想要看的分类（q退出）：")
+        input_number = input()
+        if input_number == 'q':
+            break
+        print("文章列表为：")
+        print(cluster[int(input_number)])
+
 
 def dbscan_test(file_name, eps, min_points):
     raw = loader.mat_load(file_name)
     data = raw['a']
 
+
 if __name__ == '__main__':
     # data_test('waveform012.data', 3, 'kmedoids')
     # image_test('origin.jpg', 3, 'kmeans', gauss=True)
-    # crawler_test('data.data', 10)
-    dbscan_test('moon.mat', 0.5, 5)
+    crawler_test('data.data', 10)
+    # dbscan_test('moon.mat', 0.5, 5)
