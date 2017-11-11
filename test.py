@@ -85,8 +85,12 @@ def crawler_test(data_name, num_cluster):
         keys.append(tmp[-3:])
     print(keys)
 
+def dbscan_test(file_name, eps, min_points):
+    raw = loader.mat_load(file_name)
+    data = raw['a']
 
 if __name__ == '__main__':
     # data_test('waveform012.data', 3, 'kmedoids')
     # image_test('origin.jpg', 3, 'kmeans', gauss=True)
-    crawler_test('data.data', 10)
+    # crawler_test('data.data', 10)
+    dbscan_test('moon.mat', 0.5, 5)

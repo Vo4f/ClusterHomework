@@ -8,6 +8,7 @@
 @doc: File Loader
 """
 import numpy as np
+import scipy.io as scio
 import csv
 import PIL.Image as Im
 import PIL.ImageFilter as IF
@@ -41,3 +42,7 @@ def image_load(file_name, gause):
                 x, y, z = img.getpixel((i, j))
                 data.append([x, y, z])
     return np.asarray(data), m, n
+
+
+def mat_load(file_name):
+    return scio.loadmat(file_name)
