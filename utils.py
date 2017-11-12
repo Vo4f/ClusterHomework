@@ -8,6 +8,7 @@
 @doc: Some usefully functions
 """
 import numpy as np
+import calculator
 
 
 def init_center(data, num_clusters):
@@ -30,3 +31,12 @@ def isconverged(centroid1, centroid2):
     :return: the boolean
     """
     return np.array_equal(centroid1, centroid2)
+
+
+def calc_dist_array(data):
+    m = data.shape[0]
+    dist_array = np.ones((m, m), dtype=float)
+    for i in range(m):
+        for j in range(m):
+            dist_array[i, j] = calculator.dist_euclidean(data[i], data[j])
+    return dist_array

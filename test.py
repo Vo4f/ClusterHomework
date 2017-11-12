@@ -8,6 +8,7 @@
 @doc: 
 """
 import loader
+import utils
 import numpy as np
 import PIL.Image as Im
 from kmeans import KMeans
@@ -84,7 +85,7 @@ def crawler_test(data_name, num_cluster):
         tmp = sorted(tmp.items(), key=lambda x: x[1])
         keys.append(tmp[-3:])
     for n, i in enumerate(keys):
-        print(str(n)+'类', i)
+        print(str(n) + '类', i)
     while True:
         print("请输入想要看的分类（q退出）：")
         input_number = input()
@@ -97,10 +98,11 @@ def crawler_test(data_name, num_cluster):
 def dbscan_test(file_name, eps, min_points):
     raw = loader.mat_load(file_name)
     data = raw['a']
+    dist_array = utils.calc_dist_array(data)
 
 
 if __name__ == '__main__':
     # data_test('waveform012.data', 3, 'kmedoids')
     # image_test('origin.jpg', 3, 'kmeans', gauss=True)
-    crawler_test('data.data', 10)
-    # dbscan_test('moon.mat', 0.5, 5)
+    # crawler_test('data.data', 10)
+    dbscan_test('moon.mat', 0.5, 5)
