@@ -9,6 +9,7 @@
 """
 import numpy as np
 import calculator
+import matplotlib.pyplot as plt
 
 
 def init_center(data, num_clusters):
@@ -39,4 +40,23 @@ def calc_dist_array(data):
     for i in range(m):
         for j in range(m):
             dist_array[i, j] = calculator.dist_euclidean(data[i], data[j])
+    # with open('dist_array.data', 'w') as f:
+    #     for i in range(m):
+    #         words = ''
+    #         for j in range(m):
+    #             words += str(dist_array[i, j]) + ','
+    #         f.writelines(words + '\n')
     return dist_array
+
+
+def plot_points(data):
+    x = data[:, 0]
+    y = data[:, 1]
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    ax1.set_title('data')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    ax1.scatter(x, y, c='r', marker='.')
+    plt.legend('x1')
+    plt.show()

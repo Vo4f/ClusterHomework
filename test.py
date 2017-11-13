@@ -13,6 +13,7 @@ import numpy as np
 import PIL.Image as Im
 from kmeans import KMeans
 from kmedoids import KMedoids
+from dbscan import DBSCAN
 
 
 def data_test(dataset_name, num_cluster, methods):
@@ -22,10 +23,10 @@ def data_test(dataset_name, num_cluster, methods):
         km = KMedoids(num_cluster)
     else:
         km = None
-    raw = loader.data_load(dataset_name)
+    raw = loader.csv_load(dataset_name)
     raw = np.delete(raw, -1, 1)
     km.fit(raw)
-    label = km._labels
+    label = km.labels
     class0 = label[:100]
     class1 = label[100:200]
     class2 = label[200:]
@@ -63,17 +64,11 @@ def crawler_test(data_name, num_cluster):
     words = raw[0]
     items = raw[1:]
     data = np.asarray(raw, dtype=str)
-    data = np.delete(data, (0), 1)
-    data = np.delete(data, (0), 0)
+    data = np.delete(data, 0, 1)
+    data = np.delete(data, 0, 0)
     data = np.asarray(data, dtype=float)
     km = KMeans(num_cluster)
     km.fit(data)
-    # for ni, i in enumerate(km.centroids):
-    #     for n, j in enumerate(i):
-    #         if j != 0.0:
-    #             print(str(ni), words[n + 1])
-    # print(km.labels)
-    # print(km.centroids)
     cluster = [[] for i in range(num_cluster)]
     for n, i in enumerate(km.labels):
         cluster[int(i)].append(items[n][0])
@@ -98,11 +93,15 @@ def crawler_test(data_name, num_cluster):
 def dbscan_test(file_name, eps, min_points):
     raw = loader.mat_load(file_name)
     data = raw['a']
-    dist_array = utils.calc_dist_array(data)
+    data = np.delete(data, -1, axis=1)
+    # db = DBSCAN(eps, min_points)
+    # db.fit(data)
+    # print(db.clusters)
+    utils.plot_points(data)
 
 
 if __name__ == '__main__':
     # data_test('waveform012.data', 3, 'kmedoids')
     # image_test('origin.jpg', 3, 'kmeans', gauss=True)
     # crawler_test('data.data', 10)
-    dbscan_test('moon.mat', 0.5, 5)
+    dbscan_test('moon.mat', 0.1, 10)
