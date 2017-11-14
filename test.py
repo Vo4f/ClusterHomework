@@ -5,7 +5,8 @@
 @project: PyCharm
 @file: test.py
 @time: 2017/10/29 20:51
-@doc: 
+@doc: Kmeans的实现有Bug，经常会出现float64什么什么的错误提示，再次运行即可，多运行几次，总能正常运行
+      暂时没时间debug，不影响聚类结果。
 """
 import loader
 import utils
@@ -16,7 +17,14 @@ from kmedoids import KMedoids
 from dbscan import DBSCAN
 
 
-def data_test(dataset_name, num_cluster, methods):
+def csv_test(dataset_name, num_cluster, methods):
+    """
+    第二次作业，Kmeas/Kmedoid，test程序
+    :param dataset_name: data文件名
+    :param num_cluster: 聚类数
+    :param methods: 所用聚类方法
+    :return: 聚类结果正确率
+    """
     if methods == 'kmeans':
         km = KMeans(num_cluster)
     elif methods == 'kmedoids':
@@ -25,7 +33,8 @@ def data_test(dataset_name, num_cluster, methods):
         km = None
     raw = loader.csv_load(dataset_name)
     raw = np.delete(raw, -1, 1)
-    km.fit(raw)
+    data = np.asarray(raw, dtype=float)
+    km.fit(data)
     label = km.labels
     class0 = label[:100]
     class1 = label[100:200]
@@ -38,6 +47,14 @@ def data_test(dataset_name, num_cluster, methods):
 
 
 def image_test(image_name, num_cluster, methods, gauss=False):
+    """
+    第二次作业，图片聚类test程序
+    :param image_name: 图片名
+    :param num_cluster: 聚类数
+    :param methods: 聚类方法
+    :param gauss: 是否加高斯
+    :return: 聚类后的图片
+    """
     img_data, row, col = loader.image_load(image_name, gauss)
     if methods == 'kmeans':
         km = KMeans(num_cluster)
@@ -60,6 +77,12 @@ def image_test(image_name, num_cluster, methods, gauss=False):
 
 
 def crawler_test(data_name, num_cluster):
+    """
+    第三次作业，网页聚类test程序
+    :param data_name: 爬虫爬取并处理的网页数据
+    :param num_cluster: 聚类数
+    :return: 聚类结果，交互式
+    """
     raw = loader.csv_load(data_name)
     words = raw[0]
     items = raw[1:]
@@ -90,18 +113,36 @@ def crawler_test(data_name, num_cluster):
         print(cluster[int(input_number)])
 
 
-def dbscan_test(file_name, eps, min_points):
+def dbscan_test(file_name, eps, min_points, key):
+    """
+    第四次作业，dbscan，test程序
+    :param file_name: 数据文件名
+    :param eps: 核心点半径
+    :param min_points: 半径所含最小点数量
+    :param key: 数据文件内数据key值
+    :return: 聚类后的点阵图
+    """
     raw = loader.mat_load(file_name)
-    data = raw['a']
+    # print(raw)
+    data = raw[key]
     data = np.delete(data, -1, axis=1)
-    # db = DBSCAN(eps, min_points)
-    # db.fit(data)
-    # print(db.clusters)
-    utils.plot_points(data)
+    # utils.plot_raw(data)
+    db = DBSCAN(eps, min_points)
+    db.fit(data)
+    print(db.k)
+    utils.plot_points(db.clusters)
 
 
 if __name__ == '__main__':
-    # data_test('waveform012.data', 3, 'kmedoids')
-    # image_test('origin.jpg', 3, 'kmeans', gauss=True)
-    # crawler_test('data.data', 10)
-    dbscan_test('moon.mat', 0.1, 10)
+    # csv_test('km-data\\waveform012.data', 3, 'kmeans')
+    # csv_test('km-data\\waveform012.data', 3, 'kmedoids')
+    # image_test('km-data\\origin.jpg', 3, 'kmeans', gauss=True)
+    # crawler_test('web-data\\web.data', 10)
+    dbscan_test('dbscan-data\\smile', 0.08, 12, 'smile')
+    # dbscan_test('dbscan-data\\sizes5', 1.8, 17, 'sizes5')
+    # dbscan_test('dbscan-data\\square1', 1.8, 17, 'square1')
+    # dbscan_test('dbscan-data\\square4', 1.2, 26, 'b')
+    # dbscan_test('dbscan-data\\spiral', 0.5, 10, 'spiral')
+    # dbscan_test('dbscan-data\\moon.mat', 0.15, 12, 'a')
+    # dbscan_test('dbscan-data\\long', 0.18, 10, 'long1')
+    # dbscan_test('dbscan-data\\2d4c', 1.5, 20, 'a')

@@ -12,18 +12,30 @@ import numpy as np
 
 
 class DBSCAN:
+    """
+    DBSCAN Class
+    """
     def __init__(self, eps, min_points):
+        """
+        Parameters
+        :param eps: The maximum radius for core point
+        :param min_points: The number of points in radius for the point to be considered as a core point
+        """
         self._eps = eps
         self._min_points = min_points
         self._dist_array = None
         self._k = 0
         self._cluster = []
         self._label = None
-        self.clusters = None
+        self.clusters = []
         self.labels = None
         self.k = None
 
     def fit(self, data):
+        """
+        :param data: The data in type ndarray
+        :return:
+        """
         m = data.shape[0]
         self._dist_array = utils.calc_dist_array(data)
         core_points = []
@@ -50,11 +62,21 @@ class DBSCAN:
                 self._label[i] = self._k
             self._cluster.append(ck)
             core_points = [x for x in core_points if x not in ck]
-        self.clusters = self._cluster
+        for i in range(self._k):
+            tmp = []
+            for j in self._cluster[i]:
+                tmp.append(data[j])
+            tmp = np.asarray(tmp)
+            self.clusters.append(tmp)
         self.labels = self._label
         self.k = self._k
 
     def _iscore(self, index):
+        """
+        Judge the point is core or not by it's index
+        :param index: The point index
+        :return: Boolean
+        """
         sort_list = self._dist_array[index].tolist()
         sort_list.sort()
         res = sort_list[self._min_points - 1] <= self._eps

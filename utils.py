@@ -50,6 +50,27 @@ def calc_dist_array(data):
 
 
 def plot_points(data):
+    # x = data[:, 0]
+    # y = data[:, 1]
+    # fig = plt.figure()
+    # ax1 = fig.add_subplot(111)
+    # ax1.set_title('data')
+    # plt.xlabel('x')
+    # plt.ylabel('y')
+    # ax1.scatter(x, y, c='r', marker='.')
+    # plt.legend('x1')
+    # plt.show()
+    fig, ax = plt.subplots()
+    colors = ['r', 'g', 'b', 'y', 'c']
+    markers = ['o', 'v', 'x', '*', 's']
+    for n, i in enumerate(data):
+        x = i[:, 0]
+        y = i[:, 1]
+        ax.scatter(x, y, color=colors[n], marker=markers[n])
+    plt.show()
+
+
+def plot_raw(data):
     x = data[:, 0]
     y = data[:, 1]
     fig = plt.figure()
