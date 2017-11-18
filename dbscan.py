@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-@author: verf
+@author: vo4f
 @project: PyCharm
 @file: dbscan.py
 @time: 2017/11/11 14:57
