@@ -66,33 +66,41 @@ def divide_data(data):
 class ID3(object):
     def __init__(self):
         self.tree = {}
+        self.root_h = None
 
     def fit(self, file_name):
         raw = load_csv(file_name)
         data = np.asarray(raw)
-        if calc_h(data[:, -1]) == 0.0:
+        self.root_h = calc_h(data[:, -1])
+        if self.root_h == 0.0:
             self.tree['root'] = data[0, -1]
             return
 
-        # m, n = data.shape
-        # root_h = calc_h(data[:, -1])
-        # res_tree = {}
-        # res_tmp = []
-        # for arr in range(n - 2):
-        #     new_arr = np.hstack((data[:, arr].reshape(data.shape[0], 1), data[:, -1].reshape(data.shape[0], 1)))
-        #     res_tree[arr] = {}
-        #     e = calc_e(new_arr)
-        #     g = root_h - e
-        #     res_tmp.append(g)
-        # print(res_tmp.index(max(res_tmp)))
 
-    def _go_to_end(self, data):
+            # m, n = data.shape
+            # root_h = calc_h(data[:, -1])
+            # res_tree = {}
+            # res_tmp = []
+            # for arr in range(n - 2):
+            #     new_arr = np.hstack((data[:, arr].reshape(data.shape[0], 1), data[:, -1].reshape(data.shape[0], 1)))
+            #     res_tree[arr] = {}
+            #     e = calc_e(new_arr)
+            #     g = root_h - e
+            #     res_tmp.append(g)
+            # print(res_tmp.index(max(res_tmp)))
+
+    def _roll(self, data, h):
         rn, cn = data.shape
-        for arr in range(rn - 2):
-            pass
+        glist = []
+        for attr in range(rn - 2):
+            new_arr = np.hstack((data[:, attr].reshape(data.shape[0], 1), data[:, -1].reshape(data.shape[0], 1)))
+            e = calc_e(new_arr)
+            g = h - e
+            glist.append(g)
+        res_ind = glist.index(max(glist))
+        self.tree[res_ind] = {}
 
 
 if __name__ == '__main__':
     tree = ID3()
     tree.fit('id3-data\\sp.csv')
-
