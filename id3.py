@@ -7,7 +7,8 @@
 @time: 2017/11/18 15:33
 @doc: ID3 Achieve
 """
-import csv
+import loader
+from treelib import Node, Tree
 import numpy as np
 from math import log
 
@@ -45,17 +46,6 @@ def calc_e(data):
     return e
 
 
-def load_csv(file_name):
-    """
-    load data set
-    :param file_name:
-    :return: raw data in ndarray type
-    """
-    with open(file_name, 'r', encoding='utf-8') as f:
-        data_list = list(csv.reader(f, delimiter=","))
-    return data_list
-
-
 def divide_data(data):
     count = {}
     for i in data:
@@ -65,40 +55,38 @@ def divide_data(data):
 
 class ID3(object):
     def __init__(self):
-        self.tree = {}
-        self.root_h = None
+        self.res_tree = Tree()
+        self.roll_que = []
+        self.attr_label = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
     def fit(self, file_name):
-        raw = load_csv(file_name)
+        raw = loader.csv_load(file_name)
         data = np.asarray(raw)
-        self.root_h = calc_h(data[:, -1])
-        if self.root_h == 0.0:
-            self.tree['root'] = data[0, -1]
-            return
+        roll_data = RData('r', data)
+        self.roll_que.append(roll_data)
+        while self.roll_que:
+            cdata = self.roll_que.pop(-1)
+            self._roll(cdata)
 
-
-            # m, n = data.shape
-            # root_h = calc_h(data[:, -1])
-            # res_tree = {}
-            # res_tmp = []
-            # for arr in range(n - 2):
-            #     new_arr = np.hstack((data[:, arr].reshape(data.shape[0], 1), data[:, -1].reshape(data.shape[0], 1)))
-            #     res_tree[arr] = {}
-            #     e = calc_e(new_arr)
-            #     g = root_h - e
-            #     res_tmp.append(g)
-            # print(res_tmp.index(max(res_tmp)))
-
-    def _roll(self, data, h):
-        rn, cn = data.shape
+    def _roll(self, data):
+        key = data.key
+        raw = data.raw
+        rn, cn = raw.shape
+        h = calc_h(raw[:, -1])
         glist = []
-        for attr in range(rn - 2):
-            new_arr = np.hstack((data[:, attr].reshape(data.shape[0], 1), data[:, -1].reshape(data.shape[0], 1)))
+        for attr in range(cn - 2):
+            new_arr = np.hstack((raw[:, attr].reshape(raw.shape[0], 1), raw[:, -1].reshape(raw.shape[0], 1)))
             e = calc_e(new_arr)
+            print(e)
             g = h - e
             glist.append(g)
-        res_ind = glist.index(max(glist))
-        self.tree[res_ind] = {}
+        con_attr = glist.index(max(glist))
+
+
+class RData(object):
+    def __init__(self, key, raw):
+        self.key = key
+        self.raw = raw
 
 
 if __name__ == '__main__':
