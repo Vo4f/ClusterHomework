@@ -81,3 +81,15 @@ def plot_raw(data):
     ax1.scatter(x, y, c='r', marker='.')
     plt.legend('x1')
     plt.show()
+
+
+def divide_data(data):
+    """
+    divide the data to count it's values
+    :param data:
+    :return:
+    """
+    count = {}
+    for i in data:
+        count[str(i)] = count.get(str(i), 0) + 1
+    return count

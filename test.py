@@ -15,6 +15,7 @@ import PIL.Image as Im
 from kmeans import KMeans
 from kmedoids import KMedoids
 from dbscan import DBSCAN
+from id3 import ID3
 
 
 def csv_test(dataset_name, num_cluster, methods):
@@ -132,13 +133,28 @@ def dbscan_test(file_name, eps, min_points, key):
     print(db.k)
     utils.plot_points(db.clusters)
 
+def id3_test():
+    t = ID3()
+    t.fit('id3-data\\sp.csv')
+    print('数据表示：')
+    print('天气：晴-0，多云-1，有雨-2')
+    print('温度：60+-0，70+-1，80+-2')
+    print('湿度：60至79-0，80至89-1，90以上-2')
+    print('风况：无-0，有-1')
+    while True:
+        data = input('请输入数据，格式为一连串数字（如0101），输入q退出：\n')
+        if data == 'q':
+            break
+        print('结果为：')
+        t.classify(data)
+
 
 if __name__ == '__main__':
     # csv_test('km-data\\waveform012.data', 3, 'kmeans')
     # csv_test('km-data\\waveform012.data', 3, 'kmedoids')
     # image_test('km-data\\origin.jpg', 3, 'kmeans', gauss=True)
     # crawler_test('web-data\\web.data', 10)
-    dbscan_test('dbscan-data\\smile', 0.08, 12, 'smile')
+    # dbscan_test('dbscan-data\\smile', 0.08, 12, 'smile')
     # dbscan_test('dbscan-data\\sizes5', 1.8, 17, 'sizes5')
     # dbscan_test('dbscan-data\\square1', 1.8, 17, 'square1')
     # dbscan_test('dbscan-data\\square4', 1.2, 26, 'b')
@@ -146,3 +162,4 @@ if __name__ == '__main__':
     # dbscan_test('dbscan-data\\moon.mat', 0.15, 12, 'a')
     # dbscan_test('dbscan-data\\long', 0.18, 10, 'long1')
     # dbscan_test('dbscan-data\\2d4c', 1.5, 20, 'a')
+    id3_test()
