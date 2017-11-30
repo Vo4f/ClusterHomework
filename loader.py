@@ -10,6 +10,7 @@
 import numpy as np
 import scipy.io as scio
 import csv
+import os
 import PIL.Image as Im
 import PIL.ImageFilter as IF
 
@@ -42,6 +43,18 @@ def image_load(file_name, gause):
                 x, y, z = img.getpixel((i, j))
                 data.append([x, y, z])
     return np.asarray(data), m, n
+
+
+def face_load(file_path, name, num):
+    face_data = []
+    face_label = []
+    if name == 'att':
+        for i in range(1, num + 1):
+            for pit in os.listdir(file_path + "\\s" + str(i)):
+                img = Im.open(file_path + "\\s" + str(i) + "\\" + pit)
+                face_data.append(list(img.getdata()))
+                face_label.append(i)
+    return face_data, face_label
 
 
 def mat_load(file_name):

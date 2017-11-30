@@ -16,6 +16,7 @@ from kmeans import KMeans
 from kmedoids import KMedoids
 from dbscan import DBSCAN
 from id3 import ID3
+from svm import SVM
 
 
 def csv_test(dataset_name, num_cluster, methods):
@@ -133,6 +134,7 @@ def dbscan_test(file_name, eps, min_points, key):
     print(db.k)
     utils.plot_points(db.clusters)
 
+
 def id3_test():
     t = ID3()
     t.fit('id3-data\\sp.csv')
@@ -149,6 +151,11 @@ def id3_test():
         t.classify(data)
 
 
+def svm_test():
+    s = SVM()
+    s.fit('svm-data\\att_faces', 'att', 20)
+
+
 if __name__ == '__main__':
     # csv_test('km-data\\waveform012.data', 3, 'kmeans')
     # csv_test('km-data\\waveform012.data', 3, 'kmedoids')
@@ -162,4 +169,5 @@ if __name__ == '__main__':
     # dbscan_test('dbscan-data\\moon.mat', 0.15, 12, 'a')
     # dbscan_test('dbscan-data\\long', 0.18, 10, 'long1')
     # dbscan_test('dbscan-data\\2d4c', 1.5, 20, 'a')
-    id3_test()
+    # id3_test()
+    svm_test()
