@@ -12,6 +12,7 @@ import loader
 import utils
 import numpy as np
 import PIL.Image as Im
+import matplotlib.pyplot as plt
 from kmeans import KMeans
 from kmedoids import KMedoids
 from dbscan import DBSCAN
@@ -136,6 +137,10 @@ def dbscan_test(file_name, eps, min_points, key):
 
 
 def id3_test():
+    """
+    第五次作业 id3算法实现
+    :return:
+    """
     t = ID3()
     t.fit('id3-data\\sp.csv')
     print('数据表示：')
@@ -151,9 +156,28 @@ def id3_test():
         t.classify(data)
 
 
-def svm_test():
+def svm_test(file_path, name, num):
+    """
+    第六次作业 SVM人脸识别
+    :param file_path: 数据文件所在文件夹
+    :param name: 所使用的数据库名称，att或者yale
+    :param num: 载入的人脸数目，att最大为40人，yale最大为15人，请注意数目
+    :return:
+    """
     s = SVM()
-    s.fit('svm-data\\att_faces', 'att', 20)
+    s.fit(file_path, name, num)
+    plt.figure(1)
+    bar_number = len(s.pre_list)
+    bar_x = np.arange(bar_number) + 1
+    bar_y = np.array(s.pre_list)
+    plt.bar(bar_x, bar_y)
+    plt.title("The precision of Kemels")
+    plt.xticks(bar_x, s.kernel_list)
+    plt.ylabel('precision')
+    for x, y in zip(bar_x, bar_y):
+        print(x, y)
+        plt.text(x, y + 0.005, str(y)[:5], ha='center', va='bottom')
+    plt.show()
 
 
 if __name__ == '__main__':
@@ -170,4 +194,7 @@ if __name__ == '__main__':
     # dbscan_test('dbscan-data\\long', 0.18, 10, 'long1')
     # dbscan_test('dbscan-data\\2d4c', 1.5, 20, 'a')
     # id3_test()
-    svm_test()
+    svm_test('svm-data', 'att', 40)
+    # 注意，yale的人脸库解压之后所有文件都在yale_faces文件夹里，和att不同
+    # 为了统一，我手动将yale的图片整理成了和att一样的目录结构，即每个人放在sn文件夹里
+    # 如果你要测试，请手动把yale文件整理成和我一样的格式

@@ -49,9 +49,13 @@ def face_load(file_path, name, num):
     face_data = []
     face_label = []
     if name == 'att':
-        for i in range(1, num + 1):
-            for pit in os.listdir(file_path + "\\s" + str(i)):
-                img = Im.open(file_path + "\\s" + str(i) + "\\" + pit)
+        file_path = file_path + "\\att_faces" + "\\s"
+    elif name == 'yale':
+        file_path = file_path + "\\yale_faces" + "\\s"
+    for i in range(1, num + 1):
+        for pit in os.listdir(file_path + str(i)):
+            if pit[-3:] == 'pgm':
+                img = Im.open(file_path + str(i) + "\\" + pit)
                 face_data.append(list(img.getdata()))
                 face_label.append(i)
     return face_data, face_label
