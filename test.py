@@ -126,10 +126,8 @@ def dbscan_test(file_name, eps, min_points, key):
     :return: 聚类后的点阵图
     """
     raw = loader.mat_load(file_name)
-    # print(raw)
     data = raw[key]
     data = np.delete(data, -1, axis=1)
-    # utils.plot_raw(data)
     db = DBSCAN(eps, min_points)
     db.fit(data)
     print(db.k)
@@ -194,7 +192,7 @@ if __name__ == '__main__':
     # dbscan_test('dbscan-data\\long', 0.18, 10, 'long1')
     # dbscan_test('dbscan-data\\2d4c', 1.5, 20, 'a')
     # id3_test()
-    svm_test('svm-data', 'att', 40)
+    svm_test('svm-data', 'att', 20)
     # 注意，yale的人脸库解压之后所有文件都在yale_faces文件夹里，和att不同
     # 为了统一，我手动将yale的图片整理成了和att一样的目录结构，即每个人放在sn文件夹里
     # 如果你要测试，请手动把yale文件整理成和我一样的格式
