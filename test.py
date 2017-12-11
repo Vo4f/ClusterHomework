@@ -18,6 +18,7 @@ from kmedoids import KMedoids
 from dbscan import DBSCAN
 from id3 import ID3
 from svm import SVM
+from apriori import Apriori
 
 
 def csv_test(dataset_name, num_cluster, methods):
@@ -178,6 +179,21 @@ def svm_test(file_path, name, num):
     plt.show()
 
 
+def apriori_test():
+    """
+    第七次作业 Apriori算法实现
+    :return:
+    """
+    data = np.asarray(
+        [['I1', 'I2', 'I5'], ['I2', 'I4'], ['I2', 'I3'], ['I1', 'I2', 'I4'], ['I1', 'I3'], ['I2', 'I3'], ['I1', 'I3'],
+         ['I1', 'I2', 'I3', 'I5'], ['I1', 'I2', 'I3']])
+    ap = Apriori(2)
+    ap.fit(data)
+    print('找到连接')
+    for k, v in ap.res.items():
+        print(k)
+
+
 if __name__ == '__main__':
     # csv_test('km-data\\waveform012.data', 3, 'kmeans')
     # csv_test('km-data\\waveform012.data', 3, 'kmedoids')
@@ -192,7 +208,8 @@ if __name__ == '__main__':
     # dbscan_test('dbscan-data\\long', 0.18, 10, 'long1')
     # dbscan_test('dbscan-data\\2d4c', 1.5, 20, 'a')
     # id3_test()
-    svm_test('svm-data', 'att', 20)
+    # svm_test('svm-data', 'att', 20)
     # 注意，yale的人脸库解压之后所有文件都在yale_faces文件夹里，和att不同
     # 为了统一，我手动将yale的图片整理成了和att一样的目录结构，即每个人放在sn文件夹里
     # 我的压缩包中已带有数据，如果你要测试别的数据，请手动把文件整理成和我一样的格式
+    apriori_test()
