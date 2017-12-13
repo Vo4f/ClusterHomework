@@ -82,13 +82,4 @@ class Apriori(object):
                 if cur_j not in ln.keys() or ln[cur_j] < self.min_support:
                     continue
             new_cn.append(i)
-        return
-
-
-if __name__ == '__main__':
-    data = np.asarray(
-        [['I1', 'I2', 'I5'], ['I2', 'I4'], ['I2', 'I3'], ['I1', 'I2', 'I4'], ['I1', 'I3'], ['I2', 'I3'], ['I1', 'I3'],
-         ['I1', 'I2', 'I3', 'I5'], ['I1', 'I2', 'I3']])
-    ap = Apriori(2)
-    ap.fit(data)
-    print(ap.res)
+        return new_cn
