@@ -12,6 +12,11 @@ import itertools
 
 
 def init_l1(dataset):
+    """
+    Init l1 set
+    :param dataset:
+    :return:
+    """
     frequent_list = {}
     for dset in dataset:
         for item in dset:
@@ -23,6 +28,12 @@ def init_l1(dataset):
 
 
 def support_count(dataset, clist):
+    """
+    Calculate support of given list
+    :param dataset:
+    :param clist:
+    :return:
+    """
     ln = {}
     for i in clist:
         ln[i] = 0
@@ -34,7 +45,9 @@ def support_count(dataset, clist):
 
 
 class Apriori(object):
-
+    """
+    Apriori Class
+    """
     def __init__(self, min_support):
         self.min_support = min_support
         self.data_len = None
@@ -62,6 +75,12 @@ class Apriori(object):
             ln = new_ln
 
     def generate_cn(self, ln, n):
+        """
+        Generate new Cn set from ln-1
+        :param ln:
+        :param n:
+        :return:
+        """
         cn = list(ln.keys())
         if not isinstance(cn[0], tuple):
             set_list = list(set(cn))
@@ -83,3 +102,14 @@ class Apriori(object):
                     continue
             new_cn.append(i)
         return new_cn
+
+
+if __name__ == '__main__':
+    data = np.asarray(
+        [['I1', 'I2', 'I5'], ['I2', 'I4'], ['I2', 'I3'], ['I1', 'I2', 'I4'], ['I1', 'I3'], ['I2', 'I3'], ['I1', 'I3'],
+         ['I1', 'I2', 'I3', 'I5'], ['I1', 'I2', 'I3']])
+    ap = Apriori(2)
+    ap.fit(data)
+    print('找到连接')
+    for k, v in ap.res.items():
+        print(k)
